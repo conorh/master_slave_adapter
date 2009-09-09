@@ -104,18 +104,18 @@ module ActiveRecord
         @logger.info "Switching to Master"
         original = @current
         @current = @master
-        result = yield
-        @current = original
-        result
+        yield
+      ensure
+        @current = original if defined? original
       end
 
       def with_slave
         @logger.info "Switching to Slave"
         original = @current
         @current = @slave
-        result = yield
-        @current = original
-        result
+        yield
+      ensure
+        @current = original if defined? original
       end
       
       methods_to_delegate_to_current = ["select", "select_all", "select_one", "select_value", "select_values", "columns"]
